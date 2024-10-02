@@ -19,6 +19,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.errorprone.annotations.concurrent.LazyInit;
 import com.mojang.datafixers.util.Either;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import net.minecraft.ResourceLocationException;
@@ -87,6 +88,11 @@ final class ConfabricateHolderSet<V> extends HolderSet.ListBacked<V> {
         return this.contents().contains(entry);
     }
 
+    @Override
+    public Optional<TagKey<V>> unwrapKey() {
+        return Optional.empty();
+    }
+
     sealed interface TagEntry<V> {
 
         String TAG_PREFIX = "#";
@@ -135,7 +141,7 @@ final class ConfabricateHolderSet<V> extends HolderSet.ListBacked<V> {
 
             @Override
             public void collect(final Registry<V> registry, final Consumer<Holder<V>> collector) {
-                collector.accept(registry.getOrCreateHolderOrThrow(this.item));
+                collector.accept(registry.getHolderOrThrow(this.item));
             }
 
             @Override

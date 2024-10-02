@@ -35,6 +35,8 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -71,7 +73,7 @@ public final class MinecraftSerializers {
     /**
      * Registries that should not be added to a serializer collection.
      */
-    private static final Set<ResourceKey<? extends Registry<?>>> SPECIAL_REGISTRIES = Set.of(Registry.CUSTOM_STAT_REGISTRY); // Type of RL
+    private static final Set<ResourceKey<? extends Registry<?>>> SPECIAL_REGISTRIES = Set.of(Registries.CUSTOM_STAT); // Type of RL
     private static final TypeToken<ResourceKey<? extends Registry<?>>> TYPE_RESOURCE_KEY_GENERIC
         = new TypeToken<ResourceKey<? extends Registry<?>>>() {};
 
@@ -243,7 +245,7 @@ public final class MinecraftSerializers {
             registerRegistry(
                 collection,
                 registry.getKey(),
-                RegistryAccess.BUILTIN,
+                () -> RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY),
                 registry.getValue()
             );
         }
@@ -272,7 +274,7 @@ public final class MinecraftSerializers {
         Set<Map.Entry<Type, ResourceKey<? extends Registry<?>>>> registries = KNOWN_REGISTRIES;
         if (registries == null) {
             final ImmutableSet.Builder<Map.Entry<Type, ResourceKey<? extends Registry<?>>>> accumulator = ImmutableSet.builder();
-            for (final Field registryField : Registry.class.getFields()) {
+            for (final Field registryField : Registries.class.getFields()) {
                 // only look at public static fields (excludes the ROOT registry)
                 if ((registryField.getModifiers() & (Modifier.STATIC | Modifier.PUBLIC)) != (Modifier.STATIC | Modifier.PUBLIC)) {
                     continue;

@@ -115,8 +115,7 @@ dependencies {
     minecraft "com.mojang:minecraft:$versionMinecraft"
     mappings loom.layered {
         officialMojangMappings()
-        // Disable parchement for this version since it never had a version for 1.19 and 1.19.1
-        //parchment "org.parchmentmc.data:parchment-$versionParchment@zip"
+        parchment "org.parchmentmc.data:parchment-$versionParchment@zip"
     }
     modImplementation "net.fabricmc:fabric-loader:$versionLoader"
     modImplementation "net.fabricmc.fabric-api:fabric-api:$versionFabricApi"
