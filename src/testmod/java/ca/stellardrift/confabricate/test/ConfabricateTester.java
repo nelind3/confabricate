@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
@@ -34,12 +34,10 @@ import net.fabricmc.fabric.api.resource.ResourceReloadListenerKeys;
 import net.fabricmc.fabric.api.resource.SimpleResourceReloadListener;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
-import net.minecraft.Util;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -166,7 +164,7 @@ public class ConfabricateTester implements ModInitializer {
         }
 
         // Register commands
-        CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
+        CommandRegistrationCallback.EVENT.register((dispatcher, buildCtx, env) -> {
             TestCommands.register(this, dispatcher);
         });
 
@@ -228,7 +226,7 @@ public class ConfabricateTester implements ModInitializer {
 
     @ConfigSerializable
     public static class TestmodConfig {
-        private Component message = new TextComponent("Welcome to the server!");
+        private Component message = Component.literal("Welcome to the server!");
         private List<ItemStack> items = new ArrayList<>();
         @Comment("Protection configuration. Entries for each type will be "
                 + "processed in order, and will be denied based on the first matching.")
@@ -314,7 +312,7 @@ public class ConfabricateTester implements ModInitializer {
                 result = entry.test(actor, target);
                 if (result == InteractionResult.FAIL) {
                     if (entry.denyMessage != null) {
-                        actor.sendMessage(entry.denyMessage, Util.NIL_UUID);
+                        actor.sendSystemMessage(entry.denyMessage);
                     }
                     break;
                 } else if (result != InteractionResult.PASS) {
@@ -333,7 +331,7 @@ public class ConfabricateTester implements ModInitializer {
         @Comment("Operator level to exempt users from this protection")
         private int exemptLevel = 2;
         @Comment("Message to send when a user is forbidden from this action")
-        private Component denyMessage = new TextComponent("You cannot do that!").withStyle(s -> s.withColor(TextColor.fromRgb(0xFF0000)));
+        private Component denyMessage = Component.literal("You cannot do that!").withStyle(s -> s.withColor(TextColor.fromRgb(0xFF0000)));
         @Comment("Types to catch in this entry")
         private HolderSet<V> types = HolderSet.direct(List.of());
 

@@ -16,7 +16,6 @@
 package ca.stellardrift.confabricate.test.mixin;
 
 import ca.stellardrift.confabricate.test.ConfabricateTester;
-import net.minecraft.Util;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -28,15 +27,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PlayerList.class)
 public final class PlayerListMixin {
-
-    @Inject(method = "placeNewPlayer", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/server/players/PlayerList;broadcastMessage(Lnet/minecraft/network/chat/Component;"
-                + "Lnet/minecraft/network/chat/ChatType;Ljava/util/UUID;)V"))
+    @Inject(
+        method = "placeNewPlayer",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/server/players/PlayerList;broadcastSystemMessage(Lnet/minecraft/network/chat/Component;Lnet/minecraft/resources/ResourceKey;)V"
+        )
+    )
     private void handlePlayerJoin(final Connection connection, final ServerPlayer entity, final CallbackInfo ci) {
         final Component joinMessage = ConfabricateTester.instance().configuration().message();
         if (joinMessage != null) { // our own MOTD
-            entity.sendMessage(joinMessage, Util.NIL_UUID);
+            entity.sendSystemMessage(joinMessage);
         }
     }
-
 }

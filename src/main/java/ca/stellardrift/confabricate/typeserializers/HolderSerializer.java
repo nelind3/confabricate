@@ -40,7 +40,7 @@ final class HolderSerializer<T> extends RegistryBasedSerializer<T, Holder<T>> {
         }
 
         return this.registry()
-            .getOrCreateHolder(ResourceKey.create(this.registry, loc));
+            .getOrCreateHolderOrThrow(ResourceKey.create(this.registry, loc));
     }
 
     @Override

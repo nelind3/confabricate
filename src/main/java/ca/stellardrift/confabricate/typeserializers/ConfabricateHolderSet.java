@@ -135,7 +135,7 @@ final class ConfabricateHolderSet<V> extends HolderSet.ListBacked<V> {
 
             @Override
             public void collect(final Registry<V> registry, final Consumer<Holder<V>> collector) {
-                collector.accept(registry.getOrCreateHolder(this.item));
+                collector.accept(registry.getOrCreateHolderOrThrow(this.item));
             }
 
             @Override

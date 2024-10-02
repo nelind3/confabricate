@@ -21,8 +21,8 @@
  * serialize custom {@link net.minecraft.core.Registry Regstries}
  * and {@link com.mojang.serialization.Codec Codecs}.
  *
- * <p>To be able to handle a mixed collection of registry elements and {@link net.minecraft.tags.Tag tags},
- * Confabricate can create anonymous {@link net.minecraft.tags.Tag Tags}
+ * <p>To be able to handle a mixed collection of registry elements and {@link net.minecraft.tags.TagEntry tag entries},
+ * Confabricate can create anonymous {@link net.minecraft.tags.TagEntry TagEntries}
  * which can be used in object-mapped classes to preserve information on how
  * elements were described in the configuration file.
  */
