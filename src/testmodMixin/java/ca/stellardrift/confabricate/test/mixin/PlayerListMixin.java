@@ -31,7 +31,7 @@ public final class PlayerListMixin {
         method = "placeNewPlayer",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/server/players/PlayerList;broadcastSystemMessage(Lnet/minecraft/network/chat/Component;Lnet/minecraft/resources/ResourceKey;)V"
+            target = "Lnet/minecraft/server/players/PlayerList;broadcastSystemMessage(Lnet/minecraft/network/chat/Component;Z)V"
         )
     )
     private void handlePlayerJoin(final Connection connection, final ServerPlayer entity, final CallbackInfo ci) {
